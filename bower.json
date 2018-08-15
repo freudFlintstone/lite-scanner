@@ -2,6 +2,7 @@
   "name": "lite-scanner",
   "description": "lightweight qr-code scanner web component ",
   "main": "lite-scanner.html",
+  "version": "0.2",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0"
   },
