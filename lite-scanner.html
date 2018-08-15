@@ -7,9 +7,11 @@
         display: block;
       }
     </style>
-    <h2>Hello [[prop1]]!</h2>
+
+    <video></video>
   </template>
 
+  <script src="./lib/qr-scanner.min.js"></script>
   <script>
     /**
      * `lite-scanner`
@@ -29,7 +31,20 @@
           }
         };
       }
-    }
+
+      /**
+        * Called every time the element is inserted into the DOM. Useful for 
+        * running setup code, such as fetching resources or rendering.
+        * Generally, you should try to delay work until this time.
+        */
+      connectedCallback() {
+        super.connectedCallback();
+      
+        const videoElem = this.shadowRoot.querySelector('video');
+        this.qrScanner = new QrScanner(videoElem, result => console.log('decoded qr code:', result));
+      
+      
+      }
 
     window.customElements.define(LiteScanner.is, LiteScanner);
   </script>
