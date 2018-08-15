@@ -3,8 +3,7 @@
   "description": "lightweight qr-code scanner web component ",
   "main": "lite-scanner.html",
   "dependencies": {
-    "polymer": "Polymer/polymer#^2.0.0",
-    "qr-scanner": "nimiq/qr-scanner"
+    "polymer": "Polymer/polymer#^2.0.0"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",

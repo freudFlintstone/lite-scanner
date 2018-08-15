@@ -1,5 +1,5 @@
 <link rel="import" href="../polymer/polymer-element.html">
-
+<link rel="import" href="./qr-scanner-lib.html">
 
 <dom-module id="lite-scanner">
   <template>
@@ -9,12 +9,9 @@
       }
     </style>
 
-    <video></video>
-    
+    <video id="preview"></video>
   </template>
 
-  <script src="./lib/qr-scanner.min.js"></script>
-  <script src="./lib/qr-scanner-worker.min.js"></script>
   <script>
     /**
      * `lite-scanner`
@@ -24,29 +21,66 @@
      * @polymer
      * @demo demo/index.html
      */
+
     class LiteScanner extends Polymer.Element {
       static get is() { return 'lite-scanner'; }
       static get properties() {
         return {
-          prop1: {
+          data: {
             type: String,
-            value: 'lite-scanner'
+            notify: true, 
+            reflectToAttribute: true,
+            value: ''
+          },
+          opts: {
+            type: Object,
+            notify: true,
+            computed: '_createConfig()'
           }
         };
       }
 
-      /**
-        * Called every time the element is inserted into the DOM. Useful for 
-        * running setup code, such as fetching resources or rendering.
-        * Generally, you should try to delay work until this time.
-        */
-      connectedCallback() {
-        super.connectedCallback();
+      _createConfig () {
+        return { 
+            backgroundScan: false, 
+          };
+      }
+
+      config(opts) {
+        this.opts = Object.assign(this.opts, opts);
+        this.set('opts', opts);
+      }
+
+      init() {
+        this.opts.video = this.shadowRoot.getElementById('preview');
+        let scanner = new Instascan.Scanner(this.opts);
+        this.set('scanner', scanner);
+      }
       
-        const videoElem = this.shadowRoot.querySelector('video');
-        this.qrScanner = new QrScanner(videoElem, result => console.log('decoded qr code:', result));
-      
-      
+
+      start() {
+        if (!this.scanner) {
+          console.error('Config and init first.');
+          this.init();
+        }
+
+        this.scanner.addListener('scan', (content) => {
+          console.log(content);
+          this.code = content;
+        });
+
+        Instascan.Camera.getCameras().then((cameras) => {
+          if (cameras.length > 0) {
+            this.scanner.start(cameras[cameras.length-1]);
+          } else {
+            console.error('No cameras found.');
+          }
+        }, this).catch(function (e) {
+          console.error(e);
+        });
+        // const videoElem = this.shadowRoot.querySelector('video');
+        // this.qrScanner = new QrScanner(videoElem, result => console.log('decoded qr code:', result));
+        return this.scanner;
       }
     }
     window.customElements.define(LiteScanner.is, LiteScanner);
