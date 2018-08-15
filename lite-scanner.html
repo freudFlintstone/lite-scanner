@@ -7,6 +7,11 @@
       :host {
         display: block;
       }
+
+      video {
+        transform: scale(0.5);
+        border-radius: 10px; 
+      }
     </style>
 
     <video id="preview"></video>
@@ -27,15 +32,25 @@
       static get properties() {
         return {
           data: {
-            type: String,
+            type: Object,
             notify: true, 
             reflectToAttribute: true,
+            computed: '_formatContent(content)'
+          },
+          content: {
+            type: String,
+            notify: true,
             value: ''
           },
           opts: {
             type: Object,
             notify: true,
             computed: '_createConfig()'
+          },
+          type: {
+            type: String,
+            notify: true,
+            value: 'json'
           }
         };
       }
@@ -44,6 +59,13 @@
         return { 
             backgroundScan: false, 
           };
+      }
+
+      _formatContent(content) {
+        if(!content) return {};
+        const readData = JSON.parse(content);
+        if (readData) return readData;
+        else return {};
       }
 
       config(opts) {
@@ -66,7 +88,7 @@
 
         this.scanner.addListener('scan', (content) => {
           console.log(content);
-          this.code = content;
+          this.content = content;
         });
 
         Instascan.Camera.getCameras().then((cameras) => {
