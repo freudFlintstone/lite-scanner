@@ -59,8 +59,27 @@
             notify: true,
             reflectToAttribute: true,
             value: true
+          },
+          state: {
+            type: Boolean,
+            notify: true,
+            reflectToAttribute
           }
         }
+      }
+
+      /**
+        * Array of strings describing multi-property observer methods and their
+        * dependant properties
+        */
+      static get observers() {
+        return [
+          '_scannerChanged(scanner)'
+        ];
+      }
+
+      _scannerChanged(scanner) {
+          this.set ('state', (Boolean)(scanner));
       }
 
       _createConfig() {
