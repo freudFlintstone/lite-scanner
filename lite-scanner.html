@@ -108,6 +108,10 @@
         // const videoElem = this.shadowRoot.querySelector('video');
         // this.qrScanner = new QrScanner(videoElem, result => console.log('decoded qr code:', result));
       }
+
+      stop() {
+        if (this.scanner) this.scanner.stop();
+      }
     }
     window.customElements.define(LiteScanner.is, LiteScanner);
   </script>
