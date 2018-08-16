@@ -53,6 +53,12 @@
             type: String,
             notify: true,
             value: 'json'
+          },
+          oneRead: {
+            type: Boolean,
+            notify: true,
+            reflectToAttribute: true,
+            value: true
           }
         }
       }
@@ -70,6 +76,10 @@
         const readData = JSON.parse(content);
         if (readData) return readData;
         else return {};
+      }
+
+      toggleReadMode() {
+        this.set('oneRead', !this.oneRead);
       }
 
       config(opts) {
@@ -93,6 +103,7 @@
         this.scanner.addListener('scan', (content) => {
           console.log(content);
           this.content = content;
+          if (this.oneRead) this.stop();
         });
 
         Instascan.Camera.getCameras().then((cameras) => {
