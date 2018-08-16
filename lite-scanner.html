@@ -63,7 +63,7 @@
           state: {
             type: Boolean,
             notify: true,
-            reflectToAttribute
+            reflectToAttribute: true
           }
         }
       }
@@ -79,7 +79,20 @@
       }
 
       _scannerChanged(scanner) {
-          this.set ('state', (Boolean)(scanner));
+        if (!scanner) return;
+        
+        this.scanner.addListener('scan', (content) => {
+          this.content = content;
+          if (this.oneRead) this.stop();
+        });
+
+        this.scanner.addListener('active', (content) => {
+          this.state = true;
+        });
+
+        this.scanner.addListener('inactive', (content) => {
+          this.state = false;
+        });
       }
 
       _createConfig() {
@@ -118,12 +131,6 @@
           console.error('Config and init first.');
           this.init();
         }
-
-        this.scanner.addListener('scan', (content) => {
-          console.log(content);
-          this.content = content;
-          if (this.oneRead) this.stop();
-        });
 
         Instascan.Camera.getCameras().then((cameras) => {
           if (cameras.length > 0) {
