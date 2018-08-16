@@ -97,14 +97,8 @@
 
         Instascan.Camera.getCameras().then((cameras) => {
           if (cameras.length > 0) {
-            var selectedCam = cameras[0];
-            cameras.forEach((i, c) => {
-                if (c.name.indexOf('back') != -1) {
-                    selectedCam = c;
-                    return false;
-                }
-            });
-            this.scanner.start(cameras[cameras.length-1]);
+            var selectedCam = cameras[cameras.length-1];
+            this.scanner.start(selectedCam);
           } else {
             console.error('No cameras found.');
           }
