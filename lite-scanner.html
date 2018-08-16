@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer-element.html">
+
 <link rel="import" href="./qr-scanner-lib.html">
 
 <dom-module id="lite-scanner">
@@ -6,6 +7,8 @@
     <style>
       :host {
         display: block;
+        padding: 0;
+        border-radius: 10px; 
       }
 
       video {
@@ -58,6 +61,8 @@
       _createConfig () {
         return { 
             backgroundScan: false, 
+            scanPeriod: 10,
+            mirror: false;
           };
       }
 
@@ -93,6 +98,13 @@
 
         Instascan.Camera.getCameras().then((cameras) => {
           if (cameras.length > 0) {
+            var selectedCam = cameras[0];
+            cameras.forEach((i, c) => {
+                if (c.name.indexOf('back') != -1) {
+                    selectedCam = c;
+                    return false;
+                }
+            });
             this.scanner.start(cameras[cameras.length-1]);
           } else {
             console.error('No cameras found.');
