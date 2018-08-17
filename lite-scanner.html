@@ -104,10 +104,17 @@
       }
 
       _formatContent(content) {
+        
         if(!content) return {};
+        console.log(content);
+
         const readData = JSON.parse(content);
-        if (readData) return readData;
-        else return {};
+        if (readData) {
+          setTimeout(() => {this.set('content', '');}, 500);
+          return readData;
+        } else {
+          return {};
+        }
       }
 
       toggleReadMode() {
