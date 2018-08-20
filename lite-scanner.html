@@ -108,7 +108,7 @@
         if(!content) return {};
         console.log(content);
 
-        const readData = null;
+        let readData = null;
         switch (this.type) {
           case 'json':
             readData = JSON.parse(content);
