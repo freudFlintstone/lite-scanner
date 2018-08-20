@@ -107,8 +107,16 @@
         
         if(!content) return {};
         console.log(content);
-
-        const readData = JSON.parse(content);
+        switch (this.type) {
+          case 'json':
+            const readData = JSON.parse(content);
+            break;
+          case 'string': 
+            const readData = content;
+          default:
+            break;
+        }
+        
         if (readData) {
           setTimeout(() => {this.set('content', '');}, 500);
           return readData;
