@@ -105,7 +105,18 @@
 
       _formatContent(content) {
         
-        if(!content) return {};
+        if(!content) {
+         switch (this.type) {
+           case 'json':
+            return {};
+            break;
+           case 'string':
+            return '';
+            break;
+           default:
+             break;
+         }
+        }
         console.log(content);
 
         let readData = null;
@@ -115,6 +126,7 @@
             break;
           case 'string': 
             readData = content;
+            break;
           default:
             break;
         }
