@@ -1,5 +1,7 @@
 <link rel="import" href="../polymer/polymer-element.html">
-<script defer type="text/javascript" src="./lib/instascan.min.js"></script>
+<link rel="import" href="./lib/qr-scanner-mixin.html">
+
+<!-- <script defer type="text/javascript" src="./lib/instascan.min.js"></script> -->
 <!-- <link defer rel="import" href="./qr-scanner-lib.html"> -->
 
 <dom-module id="lite-scanner">
@@ -17,9 +19,8 @@
       }
     </style>
 
-    <video id="preview"></video>
+    <video id="preview" autoplay></video>
   </template>
-
   <script>
     /**
      * `lite-scanner`
@@ -30,7 +31,7 @@
      * @demo demo/index.html
      */
 
-    class LiteScanner extends Polymer.Element {
+    class LiteScanner extends Mixins.QrScannerMixin(Polymer.Element) {
       static get is() { return 'lite-scanner'; }
       static get properties() {
         return {
@@ -53,7 +54,7 @@
           type: {
             type: String,
             notify: true,
-            value: 'json'
+            value: 'string'
           },
           oneRead: {
             type: Boolean,
@@ -70,13 +71,30 @@
       }
 
       /**
+       * Use for one-time configuration of your component after local DOM is
+       * initialized.
+       */
+      ready() {
+        super.ready();
+        Polymer.RenderStatus.afterNextRender(this, () => {
+          this.QrScanner = window.QrScanner;
+        });
+      }
+
+      /**
         * Array of strings describing multi-property observer methods and their
         * dependant properties
         */
       static get observers() {
         return [
-          '_scannerChanged(scanner)'
+          // '_scannerChanged(scanner)',
+          "_stateChanged(scanner._active)"
         ];
+      }
+
+      _stateChanged(scannerState) {
+        if(scannerState === undefined) return;
+        this.state = !!scannerState;
       }
 
       _scannerChanged(scanner) {
@@ -96,11 +114,20 @@
         });
       }
 
+      _readResult(result) {
+        if(!result) return false;
+        this.content = result;
+        if (this.oneRead) this.stop();
+        return true;
+      }
+
       _createConfig() {
         return { 
-            backgroundScan: false, 
-            scanPeriod: 10,
-            mirror: false
+            // backgroundScan: false, 
+            // video:true,
+            // scanPeriod: 10,
+            // mirror: false
+            video: { facingMode: "user" }
           }
       }
 
@@ -150,28 +177,52 @@
       }
 
       init() {
-        this.opts.video = this.shadowRoot.getElementById('preview');
-        let scanner = new Instascan.Scanner(this.opts);
+        this.opts.videoEl = this.shadowRoot.getElementById('preview');
+        let scanner = new QrScanner(this.opts.videoEl, (result) => {
+          if(!result) return false;
+          this.content = result;
+          if (this.oneRead) this.stop();
+          return true;
+        });
         this.set('scanner', scanner);
       }
+
+      // _getCameras() {
+      //   const cam = navigator.mediaDevices.getUserMedia(this.opts);
+      //   cam.then((cameras) => {
+      //     if (cameras.length > 0) {
+      //       let selectedCam = cameras[cameras.length-1];
+      //       return selectedCam
+      //     } else {
+      //       console.error('No cameras found.');
+      //     }
+      //   }, this).catch(function (e) {
+      //     console.error(e);
+      //   });
+      // }
       
 
       start() {
         if (!this.scanner) {
-          console.error('Config and init first.');
+          console.log('Config and init first.');
           this.init();
         }
 
-        Instascan.Camera.getCameras().then((cameras) => {
-          if (cameras.length > 0) {
-            var selectedCam = cameras[cameras.length-1];
-            this.scanner.start(selectedCam);
-          } else {
-            console.error('No cameras found.');
-          }
-        }, this).catch(function (e) {
-          console.error(e);
-        });
+        this.scanner.start();
+
+        // const selectedCam = this._getCameras();
+        
+
+        // Instascan.Camera.getCameras().then((cameras) => {
+        //   if (cameras.length > 0) {
+        //     var selectedCam = cameras[cameras.length-1];
+        //     this.scanner.start(selectedCam);
+        //   } else {
+        //     console.error('No cameras found.');
+        //   }
+        // }, this).catch(function (e) {
+        //   console.error(e);
+        // });
         // const videoElem = this.shadowRoot.querySelector('video');
         // this.qrScanner = new QrScanner(videoElem, result => console.log('decoded qr code:', result));
       }
@@ -181,5 +232,5 @@
       }
     }
     window.customElements.define(LiteScanner.is, LiteScanner);
-  </script>
+    </script>
 </dom-module>
