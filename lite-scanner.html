@@ -209,6 +209,7 @@
         }
 
         this.scanner.start();
+        this.state = true;
 
         // const selectedCam = this._getCameras();
         
@@ -229,6 +230,7 @@
 
       stop() {
         if (this.scanner) this.scanner.stop();
+        this.state = false;
       }
     }
     window.customElements.define(LiteScanner.is, LiteScanner);
