@@ -17,10 +17,8 @@ window.Mixins = window.Mixins || {};
      * @polymerMixinClass
      * @implements { }
      */
+
     class QrScannerMixin extends base {
-      /**
-        * Object describing property-related metadata used by Polymer features
-        */
       static get properties() {
         return {
           workerPath: {
@@ -39,50 +37,15 @@ window.Mixins = window.Mixins || {};
         super();
       
         this.QrScanner = window.QrScanner;
-
+      
       }
-
+      
       _setWorkerPath(path) {
         if (!path) return false;
         this.QrScanner.WORKER_PATH = path;
         return true;
       }
-
-
-    //   _getWorkerUrl(workerScripts) {
-    //     const jsMimeType = { type: 'text/javascript' },
-    //       workerCodeExtractor = oScript => oScript.textContent,
-    //       workerCode = Array.prototype.map.call(workerScripts, workerCodeExtractor),
-    //       workerMessageHandler = this._handleWorkerMessage.bind(this),
-    //       blob = new Blob(workerCode, jsMimeType),
-    //       objectUrl = window.URL.createObjectURL(blob);
-    //       return objectUrl;
-    //   }
-
-    //   _getScript(path) {
-    //     return new Promise(function (resolve, reject) {
-		// 		const req = new XMLHttpRequest();
-
-		// 		req.open('GET', path);
-
-		// 		req.onload = function () {
-		// 			if (req.status === 200) {
-		// 				script.textContent = req.response + script.textContent;
-		// 				script.removeAttribute('src');
-		// 				resolve(req.response);
-		// 			} else {
-		// 				reject(new Error(req.statusText));
-		// 			}
-		// 		};
-
-		// 		req.onerror = function () {
-		// 			reject(new Error('Network Error'));
-		// 		};
-
-		// 		req.send();
-		// 	});
-    //   }
-    // }
+    }
     return QrScannerMixin;
   });
 
