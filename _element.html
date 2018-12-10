@@ -1,4 +1,4 @@
-<link rel="import" href="../polymer/polymer-element.html">
+<script type="module" src="../../@polymer/polymer/polymer-element.js"></script>
 
 <dom-module id="lite-scanner">
   <template>
@@ -10,27 +10,28 @@
     <h2>Hello [[prop1]]!</h2>
   </template>
 
-  <script>
-    /**
-     * `lite-scanner`
-     * lightweight qr-code scanner web component 
-     *
-     * @customElement
-     * @polymer
-     * @demo demo/index.html
-     */
-    class LiteScanner extends Polymer.Element {
-      static get is() { return 'lite-scanner'; }
-      static get properties() {
-        return {
-          prop1: {
-            type: String,
-            value: 'lite-scanner'
-          }
-        };
+  <script type="module">
+import { Element } from '@polymer/polymer/polymer-element.js';
+/**
+ * `lite-scanner`
+ * lightweight qr-code scanner web component 
+ *
+ * @customElement
+ * @polymer
+ * @demo demo/index.html
+ */
+class LiteScanner extends Element {
+  static get is() { return 'lite-scanner'; }
+  static get properties() {
+    return {
+      prop1: {
+        type: String,
+        value: 'lite-scanner'
       }
-    }
+    };
+  }
+}
 
-    window.customElements.define(LiteScanner.is, LiteScanner);
-  </script>
+window.customElements.define(LiteScanner.is, LiteScanner);
+</script>
 </dom-module>
