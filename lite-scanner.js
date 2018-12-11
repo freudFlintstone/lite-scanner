@@ -6,9 +6,8 @@
   then delete this comment!
 */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import QrScanner from './lib/qr-scanner.min.js'
+import QrScanner from './lib/qr-scanner.min.js';
 
-import './qr-scanner-mixin.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 // import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
 /**
@@ -69,53 +68,18 @@ class LiteScanner extends PolymerElement {
       state: {
         type: Boolean,
         notify: true,
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        observer: '_stateChanged'
       }
-    }
+    };
   }
 
-  /**
-   * Use for one-time configuration of your component after local DOM is
-   * initialized.
-   */
-  ready() {
-    super.ready();
-    // afterNextRender(this, () => {
-    //   this.QrScanner = window.QrScanner;
-    // });
-  }
-
-  /**
-    * Array of strings describing multi-property observer methods and their
-    * dependant properties
-    */
-  static get observers() {
-    return [
-      // '_scannerChanged(scanner)',
-      "_stateChanged(scanner._active)"
-    ];
-  }
 
   _stateChanged(scannerState) {
     if(scannerState === undefined) return;
-    this.state = !!scannerState;
-  }
-
-  _scannerChanged(scanner) {
-    if (!scanner) return;
-    
-    this.scanner.addListener('scan', (content) => {
-      this.content = content;
-      if (this.oneRead) this.stop();
-    });
-
-    this.scanner.addListener('active', (content) => {
-      this.state = true;
-    });
-
-    this.scanner.addListener('inactive', (content) => {
-      this.state = false;
-    });
+    if(scannerState && !this.scanner) this.init();
+    if(scannerState && !this.scanner._active) {this.start(); return true;}
+    if(!scannerState && this.scanner && this.scanner._active) this.stop();
   }
 
   _readResult(result) {
@@ -132,7 +96,7 @@ class LiteScanner extends PolymerElement {
         // scanPeriod: 10,
         // mirror: false
         video: { facingMode: "user" }
-      }
+      };
   }
 
   _formatContent(content) {
@@ -141,10 +105,8 @@ class LiteScanner extends PolymerElement {
      switch (this.type) {
        case 'json':
         return {};
-        break;
        case 'string':
         return '';
-        break;
        default:
          break;
      }
@@ -171,10 +133,6 @@ class LiteScanner extends PolymerElement {
     }
   }
 
-  toggleReadMode() {
-    this.set('oneRead', !this.oneRead);
-  }
-
   config(opts) {
     this.opts = Object.assign(this.opts, opts);
     this.set('opts', opts);
@@ -191,50 +149,17 @@ class LiteScanner extends PolymerElement {
     this.set('scanner', scanner);
   }
 
-  // _getCameras() {
-  //   const cam = navigator.mediaDevices.getUserMedia(this.opts);
-  //   cam.then((cameras) => {
-  //     if (cameras.length > 0) {
-  //       let selectedCam = cameras[cameras.length-1];
-  //       return selectedCam
-  //     } else {
-  //       console.error('No cameras found.');
-  //     }
-  //   }, this).catch(function (e) {
-  //     console.error(e);
-  //   });
-  // }
-
-
   start() {
     if (!this.scanner) {
       console.log('Config and init first.');
       this.init();
     }
-
     this.scanner.start();
-    this.state = true;
-
-    // const selectedCam = this._getCameras();
-    
-
-    // Instascan.Camera.getCameras().then((cameras) => {
-    //   if (cameras.length > 0) {
-    //     var selectedCam = cameras[cameras.length-1];
-    //     this.scanner.start(selectedCam);
-    //   } else {
-    //     console.error('No cameras found.');
-    //   }
-    // }, this).catch(function (e) {
-    //   console.error(e);
-    // });
-    // const videoElem = this.shadowRoot.querySelector('video');
-    // this.qrScanner = new QrScanner(videoElem, result => console.log('decoded qr code:', result));
   }
 
   stop() {
     if (this.scanner) this.scanner.stop();
-    this.state = false;
+    this.set(state, false);
   }
 }
 window.customElements.define(LiteScanner.is, LiteScanner);
