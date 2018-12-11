@@ -51,22 +51,18 @@ class LiteScanner extends PolymerElement {
       },
       content: {
         type: String,
-        notify: true,
         value: ''
       },
       opts: {
         type: Object,
-        notify: true,
         computed: '_createConfig()'
       },
       type: {
         type: String,
-        notify: true,
         value: 'string'
       },
       oneRead: {
         type: Boolean,
-        notify: true,
         reflectToAttribute: true,
         value: true
       },

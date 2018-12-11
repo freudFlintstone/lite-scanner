@@ -33,13 +33,26 @@ document.body.appendChild($_documentContainer.content);
   </head>
   <body>
     <script type="module">
-const $_documentContainer = document.createElement('template');
-
-$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
+   
+    const $_documentContainer = document.createElement('template');
+    $_documentContainer.innerHTML = `<div class="vertical-section-container centered">
       <h3>Basic lite-scanner demo</h3>
       <demo-snippet>
         <template>
+          <style>
+            button {
+              margin: 20px;
+              height:30px;
+              width:48px;
+              border-radius: 5px;
+              display:inline;
+              background-color: #eeeeee
+            }  
+          </style>
+          <button onclick="qr.start()">READ</button>
+          <button onclick="qr.stop()">STOP</button>
           <lite-scanner id="qr" data="{{code}}"></lite-scanner>
+          <h3>Result: <span id="code"></span> </h3>
         </template>
       </demo-snippet>
     </div>`;
