@@ -76,10 +76,19 @@ class LiteScanner extends PolymerElement {
 
 
   _stateChanged(scannerState) {
-    if(scannerState === undefined) return;
-    if(scannerState && !this.scanner) this.init();
-    if(scannerState && !this.scanner._active) {this.start(); return true;}
-    if(!scannerState && this.scanner && this.scanner._active) this.stop();
+    if(scannerState === undefined) {
+      return false;
+    }
+    if(scannerState && !this.scanner) {
+      this.init();
+    }
+    if(scannerState && !this.scanner._active) {
+      this.start(); 
+      return true;
+    }
+    if(!scannerState && this.scanner && this.scanner._active) {
+      this.stop();
+    }
   }
 
   _readResult(result) {
@@ -159,7 +168,7 @@ class LiteScanner extends PolymerElement {
 
   stop() {
     if (this.scanner) this.scanner.stop();
-    this.set(state, false);
+    this.set('state', false);
   }
 }
 window.customElements.define(LiteScanner.is, LiteScanner);
