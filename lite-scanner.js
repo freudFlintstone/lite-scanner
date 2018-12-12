@@ -67,11 +67,24 @@ class LiteScanner extends PolymerElement {
       },
       state: {
         type: Boolean,
-        notify: true,
         reflectToAttribute: true,
         observer: '_stateChanged'
+      },
+      active: {
+        type: Boolean,
+        nofity: true
       }
     };
+  }
+
+  /**
+    * Array of strings describing multi-property observer methods and their
+    * dependant properties
+    */
+  static get observers() {
+    return [
+      '_activeChanged(scanner._active)'
+    ];
   }
 
 
@@ -89,6 +102,10 @@ class LiteScanner extends PolymerElement {
     if(!scannerState && this.scanner && this.scanner._active) {
       this.stop();
     }
+  }
+
+  _activeChanged(active) {
+    this.set('active', active);
   }
 
   _readResult(result) {
