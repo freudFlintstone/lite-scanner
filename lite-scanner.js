@@ -6,7 +6,7 @@
   then delete this comment!
 */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import QrScanner from './lib/qr-scanner.min.js';
+import QrScanner from './libraries/qr-scanner.min.js';
 
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 // import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
@@ -104,7 +104,7 @@ class LiteScanner extends PolymerElement {
         // video:true,
         // scanPeriod: 10,
         // mirror: false
-        video: { facingMode: "user" }
+        video: { facingMode: "environment" }
       };
   }
 
@@ -154,7 +154,7 @@ class LiteScanner extends PolymerElement {
       this.content = result;
       if (this.oneRead) this.stop();
       return true;
-    });
+    }, 720);
     this.set('scanner', scanner);
   }
 
