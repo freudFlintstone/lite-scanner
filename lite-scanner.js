@@ -72,7 +72,8 @@ class LiteScanner extends PolymerElement {
       },
       active: {
         type: Boolean,
-        nofity: true
+        nofity: true,
+        reflectToAttribute: true
       }
     };
   }
@@ -185,7 +186,7 @@ class LiteScanner extends PolymerElement {
 
   stop() {
     if (this.scanner) this.scanner.stop();
-    this.set('state', false);
+    this.set('active', false);
   }
 }
 window.customElements.define(LiteScanner.is, LiteScanner);
