@@ -96,7 +96,7 @@ class LiteScanner extends PolymerElement {
     if(scannerState && !this.scanner) {
       this.init();
     }
-    if(scannerState && !this.scanner._active) {
+    if(scannerState) {
       this.start(); 
       return true;
     }
@@ -186,7 +186,7 @@ class LiteScanner extends PolymerElement {
 
   stop() {
     if (this.scanner) this.scanner.stop();
-    this.set('active', false);
+    this.set('state', false);
   }
 }
 window.customElements.define(LiteScanner.is, LiteScanner);
