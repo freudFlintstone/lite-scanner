@@ -83,9 +83,11 @@ class LiteScanner extends PolymerElement {
     if(scannerState === undefined) {
       return false;
     }
+
     if(scannerState && !this.scanner) {
       this.init();
     }
+    if (scannerState === this.scanner._active) return false;
     if(scannerState) {
       this.start(); 
       return true;
@@ -171,9 +173,9 @@ class LiteScanner extends PolymerElement {
     if (!this.scanner) {
       console.log('Config and init first.');
       this.init();
-      this.set('isActive', true);
     }
     this.scanner.start();
+    this.set('isActive', true);
   }
 
   stop() {
