@@ -51,7 +51,7 @@ document.body.appendChild($_documentContainer.content);
           </style>
           <button onclick="qr.start()">READ</button>
           <button onclick="qr.stop()">STOP</button>
-          <lite-scanner id="qr" data="{{code}}" on-active-changed="[[listen]]"></lite-scanner>
+          <lite-scanner id="qr" data="{{code}}" on-is-active-changed="[[listen]]"></lite-scanner>
           <h3>Result: <span id="code"></span> </h3>
         </template>
       </demo-snippet>
