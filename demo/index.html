@@ -33,7 +33,7 @@ document.body.appendChild($_documentContainer.content);
   </head>
   <body>
     <script type="module">
-   
+    const listen = (change) => { console.log(change) };
     const $_documentContainer = document.createElement('template');
     $_documentContainer.innerHTML = `<div class="vertical-section-container centered">
       <h3>Basic lite-scanner demo</h3>
@@ -51,7 +51,7 @@ document.body.appendChild($_documentContainer.content);
           </style>
           <button onclick="qr.start()">READ</button>
           <button onclick="qr.stop()">STOP</button>
-          <lite-scanner id="qr" data="{{code}}"></lite-scanner>
+          <lite-scanner id="qr" data="{{code}}" on-active-changed="[[listen]]"></lite-scanner>
           <h3>Result: <span id="code"></span> </h3>
         </template>
       </demo-snippet>
