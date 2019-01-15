@@ -1,9 +1,11 @@
 <link rel="import" href="../polymer/lib/utils/mixin.html">
 
-<script type="module">
+<!-- <script type="module">
   import QrScanner from "./lib/qr-scanner.min.js";
     window.QrScanner = QrScanner;
-</script>
+</script> -->
+<script type="text/javascript" src="https://unpkg.com/@zxing/library@0.10.0"></script>
+    
 <script>
 window.Mixins = window.Mixins || {};
 
@@ -26,7 +28,7 @@ window.Mixins = window.Mixins || {};
       constructor() {
         super();
       
-        this.QrScanner = window.QrScanner;
+        this.QrScanner = new ZXing.BrowserQRCodeReader();
       
       }
     }

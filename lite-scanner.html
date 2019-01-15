@@ -1,6 +1,7 @@
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="./qr-scanner-mixin.html">
 
+
 <!-- <script defer type="text/javascript" src="./lib/instascan.min.js"></script> -->
 <!-- <link defer rel="import" href="./qr-scanner-lib.html"> -->
 
@@ -19,7 +20,7 @@
       }
     </style>
 
-    <video id="preview" autoplay></video>
+    <video id="video" autoplay></video>
   </template>
   <script>
     /**
@@ -77,7 +78,7 @@
       ready() {
         super.ready();
         Polymer.RenderStatus.afterNextRender(this, () => {
-          this.QrScanner = window.QrScanner;
+          this.scanner = this.QrScanner;
         });
       }
 
@@ -177,14 +178,26 @@
       }
 
       init() {
-        this.opts.videoEl = this.shadowRoot.getElementById('preview');
-        let scanner = new QrScanner(this.opts.videoEl, (result) => {
-          if(!result) return false;
-          this.content = result;
-          if (this.oneRead) this.stop();
-          return true;
-        }, 720);
-        this.set('scanner', scanner);
+        // this.opts.videoEl = this.shadowRoot.getElementById('video');
+        this.QrScanner.getVideoInputDevices()
+        //     .then((videoInputDevices) => {
+        //       // const sourceSelect = document.getElementById('sourceSelect')
+        //       // selectedDeviceId = videoInputDevices[0].deviceId
+        //       if (videoInputDevices.length >= 1) {
+        //         videoInputDevices.forEach((element) => {
+        //           const sourceOption = document.createElement('option')
+        //           sourceOption.text = element.label
+        //           sourceOption.value = element.deviceId
+        //           sourceSelect.appendChild(sourceOption)
+        //         })
+        //       } else {
+        //         selectedDeviceId = videoInputDevices[0].deviceId
+        //       }
+        //     }
+        this.QrScanner.getMediaElement = () => { }
+
+
+        this.set('scanner', this.QrScanner);
       }
 
       // _getCameras() {
@@ -208,7 +221,14 @@
           this.init();
         }
 
-        this.scanner.start();
+        // this.scanner.start();
+        this.scanner.decodeFromInputVideoDevice(undefined, this.$.video).then( (content) => {
+          this.content = content.text;
+          if (this.oneRead) this.stop();
+        }).catch( (err) => {
+          console.error(err);
+          this.scanner.reset();
+        });
         this.state = true;
 
         // const selectedCam = this._getCameras();
@@ -229,7 +249,7 @@
       }
 
       stop() {
-        if (this.scanner) this.scanner.stop();
+        if (this.scanner) this.scanner.reset();
         this.state = false;
       }
     }
