@@ -88,31 +88,12 @@
         */
       static get observers() {
         return [
-          // '_scannerChanged(scanner)',
-          "_stateChanged(scanner._active)"
+          "_stateChanged(scanner.stream)"
         ];
       }
 
       _stateChanged(scannerState) {
-        if(scannerState === undefined) return;
         this.state = !!scannerState;
-      }
-
-      _scannerChanged(scanner) {
-        if (!scanner) return;
-        
-        this.scanner.addListener('scan', (content) => {
-          this.content = content;
-          if (this.oneRead) this.stop();
-        });
-
-        this.scanner.addListener('active', (content) => {
-          this.state = true;
-        });
-
-        this.scanner.addListener('inactive', (content) => {
-          this.state = false;
-        });
       }
 
       _readResult(result) {
@@ -128,7 +109,7 @@
             // video:true,
             // scanPeriod: 10,
             // mirror: false
-            video: { facingMode: "user" }
+            video: { facingMode: "environment" }
           }
       }
 
@@ -178,42 +159,11 @@
       }
 
       init() {
-        // this.opts.videoEl = this.shadowRoot.getElementById('video');
         this.QrScanner.getVideoInputDevices()
-        //     .then((videoInputDevices) => {
-        //       // const sourceSelect = document.getElementById('sourceSelect')
-        //       // selectedDeviceId = videoInputDevices[0].deviceId
-        //       if (videoInputDevices.length >= 1) {
-        //         videoInputDevices.forEach((element) => {
-        //           const sourceOption = document.createElement('option')
-        //           sourceOption.text = element.label
-        //           sourceOption.value = element.deviceId
-        //           sourceSelect.appendChild(sourceOption)
-        //         })
-        //       } else {
-        //         selectedDeviceId = videoInputDevices[0].deviceId
-        //       }
-        //     }
         this.QrScanner.getMediaElement = () => { }
-
 
         this.set('scanner', this.QrScanner);
       }
-
-      // _getCameras() {
-      //   const cam = navigator.mediaDevices.getUserMedia(this.opts);
-      //   cam.then((cameras) => {
-      //     if (cameras.length > 0) {
-      //       let selectedCam = cameras[cameras.length-1];
-      //       return selectedCam
-      //     } else {
-      //       console.error('No cameras found.');
-      //     }
-      //   }, this).catch(function (e) {
-      //     console.error(e);
-      //   });
-      // }
-      
 
       start() {
         if (!this.scanner) {
@@ -221,7 +171,6 @@
           this.init();
         }
 
-        // this.scanner.start();
         this.scanner.decodeFromInputVideoDevice(undefined, this.$.video).then( (content) => {
           this.content = content.text;
           if (this.oneRead) this.stop();
@@ -231,21 +180,6 @@
         });
         this.state = true;
 
-        // const selectedCam = this._getCameras();
-        
-
-        // Instascan.Camera.getCameras().then((cameras) => {
-        //   if (cameras.length > 0) {
-        //     var selectedCam = cameras[cameras.length-1];
-        //     this.scanner.start(selectedCam);
-        //   } else {
-        //     console.error('No cameras found.');
-        //   }
-        // }, this).catch(function (e) {
-        //   console.error(e);
-        // });
-        // const videoElem = this.shadowRoot.querySelector('video');
-        // this.qrScanner = new QrScanner(videoElem, result => console.log('decoded qr code:', result));
       }
 
       stop() {
