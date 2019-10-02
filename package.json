@@ -2,7 +2,7 @@
   "description": "lightweight qr-code scanner web component ",
   "name": "@contextaware/lite-scanner",
   "license": "MIT",
-  "version": "0.6.8",
+  "version": "0.6.9",
   "author": "@contextaware",
   "resolutions": {
     "inherits": "2.0.3",
