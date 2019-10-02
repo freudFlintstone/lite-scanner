@@ -9,7 +9,7 @@ import { PolymerElement } from '@polymer/polymer/polymer-element.js';
 import QrScanner from './libraries/qr-scanner.min.js';
 import './libraries/qr-scanner.min.js.map';
 import './libraries/qr-scanner/qr-scanner-worker.min.js';
-import './libraries/qr-scanner/qr-scanner/qr-scanner-worker.min.js.map';
+import './libraries/qr-scanner/qr-scanner-worker.min.js.map';
 
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 // import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
