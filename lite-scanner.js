@@ -25,7 +25,6 @@ import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 class LiteScanner extends PolymerElement {
   static get template() {
     return html`
-    <script src="./libraries/qr-scanner/qr-scanner-worker.min.js"></script>
     <style>
       :host {
         display: block;
