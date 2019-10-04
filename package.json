@@ -12,7 +12,8 @@
   },
   "main": "lite-scanner.js",
   "dependencies": {
-    "@polymer/polymer": "^3.1.0"
+    "@polymer/polymer": "^3.1.0",
+    "qr-scanner": "^1.1.1"
   },
   "devDependencies": {
     "@polymer/iron-demo-helpers": "^3.0.2",

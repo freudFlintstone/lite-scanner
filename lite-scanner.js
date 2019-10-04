@@ -6,13 +6,17 @@
   then delete this comment!
 */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import QrScanner from './libraries/qr-scanner.min.js';
+import QrScanner from 'qr-scanner'
+// import QrScanner from './libraries/qr-scanner.min.js';
 // import './libraries/qr-scanner.min.js.map';
 // import './libraries/qr-scanner/qr-scanner-worker.min.js';
 // import './libraries/qr-scanner/qr-scanner-worker.min.js.map';
 
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 // import { afterNextRender } from '@polymer/polymer/lib/utils/render-status.js';
+
+QrScanner.WORKER_PATH = 'qr-scanner-worker.min.js';
+
 /**
  * `lite-scanner`
  * lightweight qr-code scanner web component 
